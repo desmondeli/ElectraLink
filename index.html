@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="format-detection" content="telephone=no">
+<meta name="autocomplete" content="off">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Samsung Dealer Store — Sign In</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="icon" href="/static/assets/favicon.ico" type="image/x-icon">
+  <!--
+    ── FAVICON: place your favicon at assets/favicon.ico
+    ── LOGO: place Samsung logo at assets/samsung-logo.png
+  -->
+</head>
+<body data-page="auth" autocomplete="off">
+  <!-- Trick browser autofill away from real fields -->
+<input type="text" style="display:none" autocomplete="username">
+<input type="password" style="display:none" autocomplete="new-password">
+
+  <div class="auth-page">
+
+    <!-- ── LEFT PANEL ── -->
+    <div class="auth-left">
+      <div class="auth-left-logo">
+        <img src="/static/assets/logo001.jpg" alt="Samsung" width="130">
+        <div class="nav-logo-text">SAMSUNG <span>STORE</span></div>
+      </div>
+
+      <div class="auth-eyebrow">Authorised Samsung Dealer</div>
+      <h1 class="auth-headline">
+        Ghana's #1<br>
+        <em>Samsung</em><br>
+        Retail Partner
+      </h1>
+      <p class="auth-sub">
+        Shop the full Samsung ecosystem — phones, laptops, chargers, wearables
+        and more. Personal buyers and bulk resellers welcome.
+      </p>
+
+      <ul class="auth-features">
+        <li class="auth-feat">
+          <span class="auth-feat-icon">📱</span>
+          Latest Galaxy S, A, Z, and M series in stock
+        </li>
+        <li class="auth-feat">
+          <span class="auth-feat-icon">📦</span>
+          Bulk discounts from as low as 3 units
+        </li>
+        <li class="auth-feat">
+          <span class="auth-feat-icon">🚚</span>
+          Nationwide delivery across Ghana
+        </li>
+        <li class="auth-feat">
+          <span class="auth-feat-icon">🛡️</span>
+          Genuine Samsung products with full warranty
+        </li>
+      </ul>
+    </div>
+
+    <!-- ── RIGHT PANEL (FORMS) ── -->
+    <div class="auth-right">
+
+      <!-- Tabs -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="form-login">Sign In</button>
+        <button class="auth-tab" data-tab="form-signup">Create Account</button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <div class="auth-form active" id="form-login">
+        <div class="form-group">
+          <label class="form-label" for="login-username">Username</label>
+          <input class="form-input" type="text" id="login-username" name="username"
+                 placeholder="Your username" autocomplete="username">
+          <span class="form-error" data-err="username"></span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="login-password">Password</label>
+          <input class="form-input" type="password" id="login-password" name="password"
+                 placeholder="Your password" autocomplete="off">
+          <span class="form-error" data-err="password"></span>
+        </div>
+        <button class="btn-auth">Sign In →</button>
+        <div class="auth-divider">or</div>
+        <div class="auth-switch">
+          Don't have an account?
+          <a href="#" onclick="document.querySelector('[data-tab=form-signup]').click();return false;">
+            Create one free
+          </a>
+        </div>
+      </div>
+
+      <!-- SIGNUP FORM -->
+      <div class="auth-form" id="form-signup">
+        <div class="form-group">
+          <label class="form-label" for="signup-username">Username</label>
+          <input class="form-input" type="text" id="signup-username" name="username"
+                 placeholder="Choose a username" autocomplete="username">
+          <span class="form-error" data-err="username"></span>
+        </div>
+        <div class="form-group">
+  <label class="form-label" for="signup-email">Email Address</label>
+  <input class="form-input" type="email" id="signup-email" name="email"
+         placeholder="your@email.com" autocomplete="email">
+  <span class="form-error" data-err="email"></span>
+</div>
+        <div class="form-group">
+          <label class="form-label" for="signup-password">Password</label>
+          <input class="form-input" type="password" id="signup-password" name="password"
+                 placeholder="At least 6 characters" autocomplete="off">
+          <span class="form-error" data-err="password"></span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="signup-confirm">Confirm Password</label>
+          <input class="form-input" type="password" id="signup-confirm" name="confirm"
+                 placeholder="Repeat your password" autocomplete="off">
+          <span class="form-error" data-err="confirm"></span>
+        </div>
+        <button class="btn-auth">Create Account →</button>
+        <div class="auth-switch">
+          Already have an account?
+          <a href="#" onclick="document.querySelector('[data-tab=form-login]').click();return false;">
+            Sign in
+          </a>
+        </div>
+      </div>
+
+    </div><!-- /auth-right -->
+  </div><!-- /auth-page -->
+
+  <script>
+  // Tab switching
+  document.querySelectorAll('.auth-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.tab).classList.add('active');
+    });
+  });
+
+  // Sign Up
+  document.querySelector('#form-signup .btn-auth').addEventListener('click', async () => {
+    const username = document.querySelector('#form-signup [name=username]').value.trim();
+    const email    = document.querySelector('#form-signup [name=email]').value.trim();
+    const password = document.querySelector('#form-signup [name=password]').value;
+    const confirm  = document.querySelector('#form-signup [name=confirm]').value;
+
+    if (!username || username.length < 3) { alert('Username must be at least 3 characters.'); return; }
+    if (!email || !email.includes('@'))   { alert('Enter a valid email address.'); return; }
+    if (!password || password.length < 6) { alert('Password must be at least 6 characters.'); return; }
+    if (password !== confirm)             { alert('Passwords do not match.'); return; }
+
+    const res  = await fetch('/api/register', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ username, email, password })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      localStorage.setItem('ss_session', JSON.stringify({ isLoggedIn: true, username }));
+      window.location.href = '/store';
+    } else {
+      alert(data.msg);
+    }
+  });
+
+  // Sign In
+  document.querySelector('#form-login .btn-auth').addEventListener('click', async () => {
+    const username = document.querySelector('#form-login [name=username]').value.trim();
+    const password = document.querySelector('#form-login [name=password]').value;
+
+    if (!username) { alert('Enter your username.'); return; }
+    if (!password) { alert('Enter your password.'); return; }
+
+    const res  = await fetch('/api/login', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify({ username, password })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      localStorage.setItem('ss_session', JSON.stringify({ isLoggedIn: true, username }));
+      window.location.href = '/store';
+    } else {
+      alert(data.msg);
+    }
+  });
+
+  // Enter key support
+  document.querySelectorAll('.form-input').forEach(input => {
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        const form = input.closest('.auth-form');
+        form.querySelector('.btn-auth').click();
+      }
+    });
+  });
+</script>
+<script>
+  document.querySelectorAll('.auth-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(tab.dataset.tab).classList.add('active');
+    });
+  });
+</script>
+</body>
+</html>

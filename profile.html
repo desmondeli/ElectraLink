@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile — Electra Link Samsung Store</title>
+ <link rel="stylesheet" href="/static/style.css">
+  <link rel="icon" href="/static/assets/favicon.ico" type="image/x-icon">
+  <script src="/static/app.js"></script>
+  <style>
+    .profile-page { padding: 40px 0 80px; }
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 28px;
+      align-items: start;
+      margin-top: 32px;
+    }
+    /* Sidebar */
+    .profile-sidebar {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1.5px solid var(--gray-200);
+      overflow: hidden;
+      position: sticky;
+      top: calc(var(--nav-h) + 16px);
+    }
+    .profile-avatar-wrap {
+      background: linear-gradient(135deg, var(--navy), var(--blue));
+      padding: 32px 24px;
+      text-align: center;
+    }
+    .profile-avatar {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.15);
+      margin: 0 auto 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem;
+      border: 3px solid rgba(255,255,255,.3);
+    }
+    .profile-username {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 1.3rem;
+      color: var(--white);
+    }
+    .profile-email-display {
+      font-size: .8rem;
+      color: rgba(255,255,255,.6);
+      margin-top: 4px;
+    }
+    .profile-nav { padding: 12px 0; }
+    .profile-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 20px;
+      font-size: .9rem;
+      font-weight: 600;
+      color: var(--gray-600);
+      cursor: pointer;
+      transition: var(--transition);
+      border-left: 3px solid transparent;
+    }
+    .profile-nav-item:hover { background: var(--gray-100); color: var(--blue); }
+    .profile-nav-item.active { color: var(--blue); border-left-color: var(--blue); background: rgba(20,40,160,.04); }
+
+    /* Cards */
+    .profile-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1.5px solid var(--gray-200);
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .profile-card-head {
+      padding: 16px 24px;
+      border-bottom: 1px solid var(--gray-200);
+      background: var(--gray-100);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: var(--navy);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .profile-card-body { padding: 24px; }
+
+    /* Detail rows */
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .detail-row:last-child { border-bottom: none; }
+    .detail-label { font-size: .82rem; font-weight: 600; color: var(--gray-400); text-transform: uppercase; letter-spacing: .06em; }
+    .detail-value { font-size: .95rem; font-weight: 600; color: var(--navy); }
+    .detail-value.masked { letter-spacing: .2em; color: var(--gray-400); }
+
+    /* Favourites grid */
+    .fav-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 14px;
+    }
+    .fav-card {
+      border: 1.5px solid var(--gray-200);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      transition: var(--transition);
+    }
+    .fav-card:hover { box-shadow: var(--shadow); border-color: var(--blue-light); }
+    .fav-card-img {
+      background: var(--gray-100);
+      aspect-ratio: 1;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .65rem; color: var(--gray-400); text-align: center; padding: 8px;
+      overflow: hidden;
+    }
+    .fav-card-img img { width: 100%; height: 100%; object-fit: contain; padding: 8px; }
+    .fav-card-body { padding: 10px; }
+    .fav-card-name { font-size: .8rem; font-weight: 700; color: var(--navy); margin-bottom: 4px; line-height: 1.3; }
+    .fav-card-price { font-size: .85rem; color: var(--blue); font-weight: 700; }
+    .fav-remove {
+      display: flex; align-items: center; justify-content: center;
+      gap: 4px;
+      font-size: .72rem; color: var(--danger); font-weight: 600;
+      padding: 6px; border-top: 1px solid var(--gray-100);
+      cursor: pointer; transition: var(--transition);
+    }
+    .fav-remove:hover { background: rgba(232,40,43,.06); }
+
+    /* History */
+    .history-list { display: flex; flex-direction: column; gap: 10px; }
+    .history-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px;
+      background: var(--gray-100);
+      border-radius: var(--radius-sm);
+      font-size: .9rem;
+    }
+    .history-term { font-weight: 600; color: var(--navy); display: flex; align-items: center; gap: 8px; }
+    .history-search-btn {
+      font-size: .78rem; color: var(--blue); font-weight: 600;
+      padding: 4px 10px; border-radius: 30px;
+      border: 1px solid var(--blue); transition: var(--transition);
+    }
+    .history-search-btn:hover { background: var(--blue); color: var(--white); }
+
+    .empty-state {
+      text-align: center; padding: 40px 20px;
+      color: var(--gray-400);
+    }
+    .empty-state svg { margin: 0 auto 14px; opacity: .3; }
+    .empty-state p { font-size: .95rem; font-weight: 500; }
+
+    .panel { display: none; }
+    .panel.active { display: block; }
+
+    @media (max-width: 768px) {
+      .profile-grid { grid-template-columns: 1fr; }
+      .profile-sidebar { position: static; }
+      .profile-nav { display: flex; overflow-x: auto; padding: 0; }
+      .profile-nav-item { flex-shrink: 0; border-left: none; border-bottom: 3px solid transparent; padding: 12px 16px; }
+      .profile-nav-item.active { border-bottom-color: var(--blue); border-left-color: transparent; }
+    }
+  </style>
+</head>
+<body data-page="profile">
+
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="container">
+      <a href="/store" class="nav-logo">
+        <div class="nav-logo-text">SAMSUNG <span>STORE</span></div>
+      </a>
+      <div style="flex:1"></div>
+      <div class="nav-actions">
+        <a href="/store" class="nav-btn" style="color:rgba(255,255,255,.7);">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+          <span>Store</span>
+        </a>
+        <button class="nav-btn nav-btn-logout" id="btn-logout">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+          <span class="logout-label">Logout</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="profile-page">
+    <div class="container">
+      <h1 class="section-title">My Profile</h1>
+
+      <div class="profile-grid">
+
+        <!-- Sidebar -->
+        <aside class="profile-sidebar">
+          <div class="profile-avatar-wrap">
+            <div class="profile-avatar">👤</div>
+            <div class="profile-username" id="sb-username">—</div>
+            <div class="profile-email-display" id="sb-email">—</div>
+          </div>
+          <nav class="profile-nav">
+            <div class="profile-nav-item active" data-panel="account">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Account Details
+            </div>
+            <div class="profile-nav-item" data-panel="favourites">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              Favourites
+            </div>
+            <div class="profile-nav-item" data-panel="history">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              Search History
+            </div>
+            <!-- Security / Password Reset Panel -->
+<div class="panel" id="panel-security">
+  <div class="profile-card">
+    <div class="profile-card-head">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Change Password
+    </div>
+    <div class="profile-card-body">
+      <div class="form-group">
+        <label class="form-label">Current Password</label>
+        <div class="input-eye-wrap">
+          <input class="form-input" type="password" id="pw-current" placeholder="Enter your current password">
+          <button type="button" class="eye-btn" data-target="pw-current">
+            <svg class="eye-icon eye-show" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg class="eye-icon eye-hide hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">New Password</label>
+        <div class="input-eye-wrap">
+          <input class="form-input" type="password" id="pw-new" placeholder="At least 6 characters">
+          <button type="button" class="eye-btn" data-target="pw-new">
+            <svg class="eye-icon eye-show" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg class="eye-icon eye-hide hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Confirm New Password</label>
+        <div class="input-eye-wrap">
+          <input class="form-input" type="password" id="pw-confirm" placeholder="Repeat new password">
+          <button type="button" class="eye-btn" data-target="pw-confirm">
+            <svg class="eye-icon eye-show" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg class="eye-icon eye-hide hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+          </button>
+        </div>
+      </div>
+      <div id="pw-msg" style="display:none;padding:12px 16px;border-radius:var(--radius-sm);font-size:.9rem;font-weight:600;margin-top:4px;"></div>
+      <button class="btn-place-order" id="btn-change-password" style="margin-top:8px;">
+        Update Password
+      </button>
+    </div>
+  </div>
+</div>
+            <div class="profile-nav-item" data-panel="security">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                Security
+            </div>
+          </nav>
+        </aside>
+
+        <!-- Main panels -->
+        <div>
+
+          <!-- Account Details Panel -->
+          <div class="panel active" id="panel-account">
+            <div class="profile-card">
+              <div class="profile-card-head">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                Account Details
+              </div>
+              <div class="profile-card-body">
+                <div class="detail-row">
+                  <span class="detail-label">Username</span>
+                  <span class="detail-value" id="d-username">—</span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Email Address</span>
+                  <span class="detail-value" id="d-email">—</span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Password</span>
+                  <span class="detail-value masked" id="d-password">••••••••</span>
+                </div>
+                <div class="detail-row">
+                  <span class="detail-label">Account Status</span>
+                  <span class="detail-value" style="color:var(--success);">✓ Active</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Favourites Panel -->
+          <div class="panel" id="panel-favourites">
+            <div class="profile-card">
+              <div class="profile-card-head">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                My Favourites
+              </div>
+              <div class="profile-card-body">
+                <div id="fav-grid-wrap"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Search History Panel -->
+          <div class="panel" id="panel-history">
+            <div class="profile-card">
+              <div class="profile-card-head">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                Search History
+              </div>
+              <div class="profile-card-body">
+                <div id="history-wrap"></div>
+                <button id="btn-clear-history" style="margin-top:16px;font-size:.82rem;color:var(--danger);font-weight:600;padding:8px 16px;border:1px solid var(--danger);border-radius:var(--radius-sm);transition:var(--transition);display:none;">
+                  Clear Search History
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer style="background:var(--navy);color:rgba(255,255,255,.5);text-align:center;padding:24px;font-size:.85rem;">
+    © 2025 Electra Link Samsung Store, Accra, Ghana. All rights reserved.
+  </footer>
+
+  <script src="/static/app.js"></script>
+  <script>
+  document.addEventListener('DOMContentLoaded', async () => {
+
+    // Get current user from Flask session
+    const res  = await fetch('/api/me');
+    const data = await res.json();
+
+    if (!data.ok) { window.location.href = '/'; return; }
+
+    const username = data.username;
+    const email    = data.email;
+
+    // Populate sidebar and details
+    document.getElementById('sb-username').textContent = username;
+    document.getElementById('sb-email').textContent    = email || 'No email saved';
+    document.getElementById('d-username').textContent  = username;
+    document.getElementById('d-email').textContent     = email || 'Not provided';
+    document.getElementById('d-password').textContent  = '••••••••';
+
+    // Logout
+    document.getElementById('btn-logout')?.addEventListener('click', async () => {
+      await fetch('/api/logout', { method: 'POST' });
+      window.location.href = '/';
+      // Eye toggles for password fields
+document.querySelectorAll('.eye-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const input = document.getElementById(btn.dataset.target);
+    const isHidden = input.type === 'password';
+    input.type = isHidden ? 'text' : 'password';
+    btn.querySelector('.eye-show').classList.toggle('hidden', isHidden);
+    btn.querySelector('.eye-hide').classList.toggle('hidden', !isHidden);
+  });
+});
+// Search History
+const histWrap  = document.getElementById('history-wrap');
+const clearHistBtn = document.getElementById('btn-clear-history');
+
+function renderHistory() {
+  const hist = JSON.parse(localStorage.getItem('ss_search_history') || '[]');
+
+  if (!hist.length) {
+    histWrap.innerHTML = `<div class="empty-state">
+      <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <p>No search history yet</p>
+      <small>Your recent searches will appear here</small>
+    </div>`;
+    clearHistBtn.style.display = 'none';
+    return;
+  }
+
+  clearHistBtn.style.display = 'inline-block';
+  histWrap.innerHTML = `<div class="history-list">${hist.map((term, idx) => `
+    <div class="history-item" style="justify-content:space-between;">
+      <span class="history-term">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="opacity:.5">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        ${term}
+      </span>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <a href="/store?q=${encodeURIComponent(term)}" class="history-search-btn">Search again</a>
+        <button class="history-delete" data-idx="${idx}"
+          style="background:none;border:none;cursor:pointer;color:var(--gray-400);font-size:.85rem;padding:2px 6px;"
+          title="Remove">✕</button>
+      </div>
+    </div>`).join('')}</div>`;
+
+  // Delete individual entry
+  histWrap.querySelectorAll('.history-delete').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const current = JSON.parse(localStorage.getItem('ss_search_history') || '[]');
+      current.splice(parseInt(btn.dataset.idx), 1);
+      localStorage.setItem('ss_search_history', JSON.stringify(current));
+      renderHistory();
+    });
+  });
+}
+
+renderHistory();
+
+clearHistBtn.addEventListener('click', () => {
+  localStorage.removeItem('ss_search_history');
+  renderHistory();
+});
+
+// Change password
+const pwMsg = document.getElementById('pw-msg');
+document.getElementById('btn-change-password')?.addEventListener('click', async () => {
+  const current = document.getElementById('pw-current').value;
+  const newPw   = document.getElementById('pw-new').value;
+  const confirm = document.getElementById('pw-confirm').value;
+
+  pwMsg.style.display = 'none';
+
+  if (!current)           { showPwMsg('Enter your current password.', 'error'); return; }
+  if (newPw.length < 6)  { showPwMsg('New password must be at least 6 characters.', 'error'); return; }
+  if (newPw !== confirm)  { showPwMsg('New passwords do not match.', 'error'); return; }
+
+  const res  = await fetch('/api/change-password', {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body:    JSON.stringify({ current_password: current, new_password: newPw })
+  });
+  const data = await res.json();
+
+  if (data.ok) {
+    showPwMsg('✓ Password updated successfully!', 'success');
+    document.getElementById('pw-current').value = '';
+    document.getElementById('pw-new').value     = '';
+    document.getElementById('pw-confirm').value = '';
+  } else {
+    showPwMsg(data.msg, 'error');
+  }
+});
+
+function showPwMsg(msg, type) {
+  pwMsg.textContent     = msg;
+  pwMsg.style.display   = 'block';
+  pwMsg.style.background = type === 'success' ? 'rgba(0,168,107,.1)' : 'rgba(232,40,43,.08)';
+  pwMsg.style.color      = type === 'success' ? 'var(--success)' : 'var(--danger)';
+  pwMsg.style.border     = `1px solid ${type === 'success' ? 'var(--success)' : 'var(--danger)'}`;
+}
+    });
+
+    // Panel switching
+    document.querySelectorAll('.profile-nav-item').forEach(item => {
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.profile-nav-item').forEach(i => i.classList.remove('active'));
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        item.classList.add('active');
+        document.getElementById('panel-' + item.dataset.panel).classList.add('active');
+      });
+    });
+
+  // Favourites
+const favWrap = document.getElementById('fav-grid-wrap');
+
+function renderFavourites() {
+  const ids = JSON.parse(localStorage.getItem('ss_favs') || '[]');
+  if (!ids.length) {
+    favWrap.innerHTML = `<div class="empty-state">
+      <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"/>
+      </svg>
+      <p>No favourites yet</p>
+      <small>Tap the ♡ on any product to save it here</small>
+    </div>`;
+    return;
+  }
+
+  const favProducts = ids.map(id => PRODUCTS.find(p => p.id === id)).filter(Boolean);
+  if (!favProducts.length) {
+    favWrap.innerHTML = '<div class="empty-state"><p>No favourites found.</p></div>';
+    return;
+  }
+
+  favWrap.innerHTML = `<div class="fav-grid">${favProducts.map(p => {
+    const imgHtml = p.image
+      ? `<img src="${p.image}" alt="${p.name}" loading="lazy">`
+      : `<div style="font-size:1.8rem;display:flex;align-items:center;justify-content:center;height:100%;">📷</div>`;
+    return `<div class="fav-card" data-id="${p.id}">
+      <div class="fav-card-img">${imgHtml}</div>
+      <div class="fav-card-body">
+        <div class="fav-card-name">${p.name}</div>
+        <div class="fav-card-price">GH₵ ${p.price.toLocaleString()}</div>
+        <div style="display:flex;gap:6px;margin-top:8px;">
+          <button class="fav-add-cart" data-id="${p.id}"
+            style="flex:1;padding:6px;background:var(--blue);color:var(--white);border:none;border-radius:var(--radius-sm);font-size:.75rem;font-weight:600;cursor:pointer;">
+            Add to Cart
+          </button>
+          <button class="fav-view" data-id="${p.id}"
+            style="flex:1;padding:6px;background:var(--gray-100);color:var(--navy);border:1px solid var(--gray-200);border-radius:var(--radius-sm);font-size:.75rem;font-weight:600;cursor:pointer;">
+            View
+          </button>
+        </div>
+      </div>
+      <div class="fav-remove" data-id="${p.id}">✕ Remove</div>
+    </div>`;
+  }).join('')}</div>`;
+
+  // Remove from favourites
+  favWrap.querySelectorAll('.fav-remove').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const saved = JSON.parse(localStorage.getItem('ss_favs') || '[]');
+      const updated = saved.filter(id => id !== btn.dataset.id);
+      localStorage.setItem('ss_favs', JSON.stringify(updated));
+      renderFavourites();
+    });
+  });
+
+  // Add to cart from favourites
+  favWrap.querySelectorAll('.fav-add-cart').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const product = PRODUCTS.find(p => p.id === btn.dataset.id);
+      if (!product || product.stock === 0) { alert('This product is out of stock.'); return; }
+      const cart = JSON.parse(localStorage.getItem('ss_cart') || '[]');
+      const existing = cart.find(i => i.id === btn.dataset.id);
+      if (existing) { existing.qty = Math.min(existing.qty + 1, product.stock); }
+      else { cart.push({ id: btn.dataset.id, qty: 1 }); }
+      localStorage.setItem('ss_cart', JSON.stringify(cart));
+      alert(`${product.name} added to cart!`);
+    });
+  });
+
+  // View product details (opens store with product highlighted)
+  favWrap.querySelectorAll('.fav-view').forEach(btn => {
+    btn.addEventListener('click', () => {
+      window.location.href = `/store?product=${btn.dataset.id}`;
+    });
+  });
+}
+
+renderFavourites();
+
+    // Orders
+    const ordRes    = await fetch('/api/orders');
+    const orders    = await ordRes.json();
+    const histWrap  = document.getElementById('history-wrap');
+    const clearBtn  = document.getElementById('btn-clear-history');
+
+    if (!orders.length) {
+      histWrap.innerHTML = `<div class="empty-state">
+        <p>No orders yet</p>
+        <small>Your order history will appear here</small>
+      </div>`;
+    } else {
+      clearBtn.style.display = 'inline-block';
+      histWrap.innerHTML = `<div class="history-list">${orders.map(o => `
+        <div class="history-item">
+          <span class="history-term">🛍 ${o.order_number} — GH₵ ${o.total.toLocaleString()} — ${o.date}</span>
+          <span style="font-size:.78rem;color:var(--success);font-weight:600;">${o.status}</span>
+        </div>`).join('')}</div>`;
+    }
+
+  });
+</script>
+</body>
+</html>
