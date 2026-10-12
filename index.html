@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Samsung Dealer Store — Sign In</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="/static/assets/favicon.ico" type="image/x-icon">
+  <!--
+    ── FAVICON: place your favicon at assets/favicon.ico
+    ── LOGO: place Samsung logo at assets/samsung-logo.png
+  -->
+</head>
+<body data-page="auth">
+
+  <div class="auth-page">
+
+    <!-- ── LEFT PANEL ── -->
+    <div class="auth-left">
+      <div class="auth-left-logo">
+        <!--
+          ── INSERT LOGO IMAGE:
+          <img src="assets/samsung-logo-white.png" alt="Samsung" width="160">
+          OR keep text logo below:
+        -->
+        <div class="nav-logo-text">ELECTRA <span>LINK</span></div>
+      </div>
+
+      <div class="auth-eyebrow">Authorised Samsung Dealer</div>
+      <h1 class="auth-headline">
+        Ghana's #1<br>
+        <em>Samsung</em><br>
+        Retail Partner
+      </h1>
+      <p class="auth-sub">
+        Shop the full Samsung ecosystem — phones, laptops, chargers, wearables
+        and more. Personal buyers and bulk resellers welcome.
+      </p>
+
+      <ul class="auth-features">
+        <li class="auth-feat">
+          <span class="auth-feat-icon">📱</span>
+          Latest Galaxy S, A, Z, and M series in stock
+        </li>
+        <li class="auth-feat">
+          <span class="auth-feat-icon">📦</span>
+          Bulk discounts from as low as 3 units
+        </li>
+        <li class="auth-feat">
+          <span class="auth-feat-icon">🚚</span>
+          Nationwide delivery across Ghana
+        </li>
+        <li class="auth-feat">
+          <span class="auth-feat-icon">🛡️</span>
+          Genuine Samsung products with full warranty
+        </li>
+      </ul>
+    </div>
+
+    <!-- ── RIGHT PANEL (FORMS) ── -->
+    <div class="auth-right">
+
+      <!-- Mobile header — only shows on small screens -->
+      <div class="auth-mobile-header">
+        <svg width="52" height="52" viewBox="0 0 90 90" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="45" cy="45" r="43" fill="#050D2E" stroke="#4F7EFF" stroke-width="2"/>
+          <polygon points="45,18 27,52 43,52 35,72 64,38 48,38 62,18" fill="#4F7EFF"/>
+        </svg>
+        <div class="auth-mobile-title">ELECTRA <span>LINK</span></div>
+        <div class="auth-mobile-sub">Authorised Samsung Dealer · Accra, Ghana</div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="form-login">Sign In</button>
+        <button class="auth-tab" data-tab="form-signup">Create Account</button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <div class="auth-form active" id="form-login">
+        <div class="form-group">
+          <label class="form-label" for="login-username">Username</label>
+          <input class="form-input" type="text" id="login-username" name="username"
+                 placeholder="Your username" autocomplete="username">
+          <span class="form-error" data-err="username"></span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="login-password">Password</label>
+          <div class="input-eye-wrap">
+            <input class="form-input" type="password" id="login-password" name="password"
+                   placeholder="Your password" autocomplete="current-password">
+            <button type="button" class="eye-btn" data-target="login-password" aria-label="Show password">
+              <svg class="eye-icon eye-show" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              <svg class="eye-icon eye-hide hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+            </button>
+          </div>
+          <span class="form-error" data-err="password"></span>
+        </div>
+        <button class="btn-auth">Sign In →</button>
+        <div class="auth-divider">or</div>
+        <div class="auth-switch">
+          Don't have an account?
+          <a href="#" onclick="document.querySelector('[data-tab=form-signup]').click();return false;">
+            Create one free
+          </a>
+        </div>
+      </div>
+
+      <!-- SIGNUP FORM -->
+      <div class="auth-form" id="form-signup">
+        <div class="form-group">
+          <label class="form-label" for="signup-username">Username</label>
+          <input class="form-input" type="text" id="signup-username" name="username"
+                 placeholder="Choose a username" autocomplete="username">
+          <span class="form-error" data-err="username"></span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="signup-email">Email Address</label>
+          <input class="form-input" type="email" id="signup-email" name="email"
+                 placeholder="your@email.com" autocomplete="email">
+          <span class="form-error" data-err="email"></span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="signup-password">Password</label>
+          <div class="input-eye-wrap">
+            <input class="form-input" type="password" id="signup-password" name="password"
+                   placeholder="At least 6 characters" autocomplete="new-password">
+            <button type="button" class="eye-btn" data-target="signup-password" aria-label="Show password">
+              <svg class="eye-icon eye-show" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              <svg class="eye-icon eye-hide hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+            </button>
+          </div>
+          <span class="form-error" data-err="password"></span>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="signup-confirm">Confirm Password</label>
+          <div class="input-eye-wrap">
+            <input class="form-input" type="password" id="signup-confirm" name="confirm"
+                   placeholder="Repeat your password" autocomplete="new-password">
+            <button type="button" class="eye-btn" data-target="signup-confirm" aria-label="Show password">
+              <svg class="eye-icon eye-show" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              <svg class="eye-icon eye-hide hidden" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+            </button>
+          </div>
+          <span class="form-error" data-err="confirm"></span>
+        </div>
+        <button class="btn-auth">Create Account →</button>
+        <div class="auth-switch">
+          Already have an account?
+          <a href="#" onclick="document.querySelector('[data-tab=form-login]').click();return false;">
+            Sign in
+          </a>
+        </div>
+      </div>
+
+    </div><!-- /auth-right -->
+  </div><!-- /auth-page -->
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
